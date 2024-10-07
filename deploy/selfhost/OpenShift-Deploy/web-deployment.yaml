@@ -1,0 +1,104 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  annotations:
+    kompose.cmd: C:\Users\lenovo\kompose.exe convert
+    kompose.version: 1.34.0 (cbf2835db)
+  labels:
+    io.kompose.service: web
+  name: web
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      io.kompose.service: web
+  template:
+    metadata:
+      annotations:
+        kompose.cmd: C:\Users\lenovo\kompose.exe convert
+        kompose.version: 1.34.0 (cbf2835db)
+      labels:
+        io.kompose.service: web
+    spec:
+      containers:
+        - args:
+            - node
+            - web/server.js
+            - web
+          env:
+            - name: AMQP_URL
+              value: amqp://plane:plane@plane-mq:5672/plane
+            - name: API_BASE_URL
+              value: http://api:8000
+            - name: AWS_ACCESS_KEY_ID
+              value: '"access-key"'
+            - name: AWS_REGION
+              value: '""'
+            - name: AWS_S3_BUCKET_NAME
+              value: uploads
+            - name: AWS_S3_ENDPOINT_URL
+              value: http://plane-minio:9000
+            - name: AWS_SECRET_ACCESS_KEY
+              value: '"secret-key"'
+            - name: BUCKET_NAME
+              value: uploads
+            - name: CORS_ALLOWED_ORIGINS
+            - name: DATABASE_URL
+              value: postgresql://plane:plane@plane-db/plane
+            - name: DEBUG
+              value: "0"
+            - name: FILE_SIZE_LIMIT
+              value: "5242880"
+            - name: GUNICORN_WORKERS
+              value: "1"
+            - name: MINIO_ROOT_PASSWORD
+              value: '"secret-key"'
+            - name: MINIO_ROOT_USER
+              value: '"access-key"'
+            - name: NGINX_PORT
+              value: "80"
+            - name: PGDATA
+              value: /var/lib/postgresql/data
+            - name: PGDATABASE
+              value: plane
+            - name: PGHOST
+              value: plane-db
+            - name: POSTGRES_DB
+              value: plane
+            - name: POSTGRES_PASSWORD
+              value: plane
+            - name: POSTGRES_PORT
+              value: "5432"
+            - name: POSTGRES_USER
+              value: plane
+            - name: RABBITMQ_DEFAULT_PASS
+              value: plane
+            - name: RABBITMQ_DEFAULT_USER
+              value: plane
+            - name: RABBITMQ_DEFAULT_VHOST
+              value: plane
+            - name: RABBITMQ_HOST
+              value: plane-mq
+            - name: RABBITMQ_PORT
+              value: "5672"
+            - name: RABBITMQ_VHOST
+              value: plane
+            - name: REDIS_HOST
+              value: plane-redis
+            - name: REDIS_PORT
+              value: "6379"
+            - name: REDIS_URL
+              value: redis://plane-redis:6379/
+            - name: SECRET_KEY
+              value: 60gp0byfz2dvffa45cxl20p1scy9xbpf6d8c5y0geejgkyp1b5
+            - name: SENTRY_DSN
+              value: '""'
+            - name: SENTRY_ENVIRONMENT
+              value: '"production"'
+            - name: USE_MINIO
+              value: "1"
+            - name: WEB_URL
+              value: http://localhost
+          image: makeplane/plane-frontend:stable
+          name: web
+      restartPolicy: Always
